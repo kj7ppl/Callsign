@@ -103,7 +103,6 @@
     
     // Initialize the SPI connection:
     SPI.begin();
-    SPI.setClockDivider( SPI_CLOCK_DIV2 );      // Must be less than 10MHz.
     
     // Initialize the MAX7456 OSD:
     OSD.begin();                                // Use NTSC with default area.
@@ -118,7 +117,8 @@
     {
         OSD.setDefaultSystem(MAX7456_NTSC) ;
     }
-    
+
+    OSD.setSwitchingTime( 5 );
     OSD.display();                              // Activate the text display.
     
   }
@@ -132,14 +132,20 @@
 
   void loop() 
   {
-    
-    while (OSD.notInVSync());                   // Wait for VSync to start to 
-                                                //   prevent write artifacts.
-    OSD.print( "Hello World!" );                // The '!' will not display
-                                                //   because it does not come 
-                                                //   in the factory font.
-    while (true);
-    
+    const char callsign[] = "KJ7PPL";
+    const int callsign_len = strlen(callsign);
+
+    char dirty = 0;
+    while (true) {
+      if (OSD.notInVSync()) {
+        dirty = 0;
+      }
+      else if (dirty == 0) {
+        OSD.setCursor(-callsign_len, -1);
+        OSD.print("KJ7PPL");
+        dirty = 1;
+      }
+    }
   } 
   // loop()
 

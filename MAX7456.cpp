@@ -258,8 +258,7 @@
                    0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B,
                    0x3C, 0x3D, 0x3E,    0,    0,    0,    0,    0  };
 
-
-
+  const static SPISettings SPI_SETTINGS(10000000, MSBFIRST, SPI_MODE0);
 
 
 // Constructors ////////////////////////////////////////////////////////////////
@@ -285,7 +284,6 @@
     resetFinishTime = micros() +                // Assume reset until end of 
                           MAX7456_TIME_PWR;     //   power on reset time.
     
-    syncSource       = MAX7456_AUTOSYNC;
     defaultSystem    = MAX7456_NTSC;
     charEncoding     = MAX7456_MAXIM;
   
@@ -379,12 +377,7 @@
     
     // Copy to private variables:
     SPIObject = handleToSPI;
-    
-    
-    // Initialize the SPI connection to the MAX7456 OSD:
-    SPIObject->setBitOrder( MSBFIRST );         // Transfer data with the most 
-                                                //   significant bit first.
-    
+    SPIObject->beginTransaction(SPI_SETTINGS);
     
     // Handle first beginning events:
     if (!begun)                                 // If first attempt at begin(), 

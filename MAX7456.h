@@ -277,7 +277,6 @@
 
       unsigned long       resetFinishTime;
       
-      uint8_t             syncSource;
       uint8_t             defaultSystem;
       uint8_t             charEncoding;
       
